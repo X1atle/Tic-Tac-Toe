@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:Tic_Tac_Toe"
         mc:Ignorable="d"
         Title="Tic-Tac-Toe" Height="450" Width="800"
-        FontFamily="JetBrains Mono"
-        Background="{StaticResource BackgroundColor}">
+        FontFamily="Arial"
+        Background="{StaticResource BackgroundColor}"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
