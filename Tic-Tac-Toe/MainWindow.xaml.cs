@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 
@@ -18,7 +19,13 @@ namespace Tic_Tac_Toe
             { Player.X, new BitmapImage(new Uri("pack://application:,,,/Assets/X15.png")) },
             { Player.O, new BitmapImage(new Uri("pack://application:,,,/Assets/O15.png")) }
         };
-        
+
+        private readonly Dictionary<Player, ObjectAnimationUsingKeyFrames> animations = new()
+        {
+            { Player.X, new ObjectAnimationUsingKeyFrames() },
+            { Player.O, new ObjectAnimationUsingKeyFrames() } 
+        };
+
         private readonly Image[,] imageControls = new Image[3, 3];
         private readonly GameState gameState = new GameState();
 
@@ -26,6 +33,7 @@ namespace Tic_Tac_Toe
         {
             InitializeComponent();
             SetupGameGrid();
+            SetupAnimations();
 
             gameState.MoveMade += OnMoveMade;
             gameState.GameEnded += OnGameEnded;
@@ -45,6 +53,25 @@ namespace Tic_Tac_Toe
             }
         }
 
+        private void SetupAnimations()
+        {
+            animations[Player.X].Duration = TimeSpan.FromSeconds(.25);
+            animations[Player.O].Duration = TimeSpan.FromSeconds(.25);
+            
+            for (int i = 0; i < 16; i++)
+            {
+                Uri xUri = new Uri($"pack://application:,,,/Assets/X{i}.png");
+                BitmapImage xImg = new BitmapImage(xUri);
+                DiscreteObjectKeyFrame xKeyFrame = new DiscreteObjectKeyFrame(xImg);
+                animations[Player.X].KeyFrames.Add(xKeyFrame);
+
+                Uri oUri = new Uri($"pack://application:,,,/Assets/O{i}.png");
+                BitmapImage oImg = new BitmapImage(oUri);
+                DiscreteObjectKeyFrame oKeyFrame = new DiscreteObjectKeyFrame(oImg);
+                animations[Player.O].KeyFrames.Add(oKeyFrame);
+            }
+        }
+        
         private void TransistionToEndScreen(string text, ImageSource winnerImage)
         {
             TurnPanel.Visibility = Visibility.Hidden;
@@ -103,7 +130,7 @@ namespace Tic_Tac_Toe
         private void OnMoveMade(int r, int c)
         {
             Player player = gameState.GameGrid[r, c];
-            imageControls[r, c].Source = imageSources[player];
+            imageControls[r, c].BeginAnimation(Image.SourceProperty, animations[player]);
             PlayerImage.Source = imageSources[gameState.CurrentPlayer];
         }
 
@@ -128,6 +155,7 @@ namespace Tic_Tac_Toe
             {
                 for (int c = 0; c < 3; c++)
                 {
+                    imageControls[r, c].BeginAnimation(Image.SourceProperty, null);
                     imageControls[r, c].Source = null;
                 }
             }
