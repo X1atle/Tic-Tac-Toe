@@ -2,8 +2,6 @@
 
 This is a simple implementation of the classic Tic-Tac-Toe game using Windows Presentation Foundation (WPF). The game features a graphical user interface where two players can take turns making moves and compete to achieve a winning combination.
 
-![Screenshot](screenshot.png) <!-- If you have a screenshot, add it here -->
-
 ## Features
 
 - Play a game of Tic-Tac-Toe against a friend on the same computer.
